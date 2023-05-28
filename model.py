@@ -10,17 +10,13 @@ def QDNAEncoder(gstr,ops):
     dual = dual_dna(gstr)
     enc_gsstr = one_hot_encoding_dna(gstr)
     enc_gastr = one_hot_encoding_dna(dual)
-
     w = np.random.random(size=[3])/2*np.pi
-
     akernel = ASymmetricDNAEncoder(w)
     skernel = SymmetricDNAEncoder(w)
     qemb_s = [np.matmul(skernel,enc_gsstr[i]) for i in range(enc_gsstr.shape[0])]
     qemb_a = [np.matmul(akernel,enc_gastr[i]) for i in range(enc_gastr.shape[0])]
     qemb_s = np.vstack(qemb_s)
     qemb_a = np.vstack(qemb_a)
-    #print(qemb_s.shape)
-    #print(qemb_a.shape)
     if ops == 'linear_comb':
         genc = (qemb_a + qemb_s)/2
     elif ops == 'concat_depth':
@@ -31,13 +27,4 @@ def QDNAEncoder(gstr,ops):
         genc = np.matmul(qemb_a.T,qemb_s) - np.matmul(qemb_s.T,qemb_a)
     elif ops == 'outer_prod':
         genc = np.matmul(qemb_a,qemb_s.T) - np.matmul(qemb_s,qemb_a.T)
-    
-    '''
-    complex_hinton_plot(qemb_s)
-    plt.savefig('DQE_A-Kernel_{}.jpg'.format(time.time()))
-    complex_hinton_plot(qemb_a)
-    plt.savefig('DQE_S-Kernel_{}.jpg'.format(time.time()))
-    '''
-
     return genc
-
