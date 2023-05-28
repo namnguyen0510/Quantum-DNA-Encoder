@@ -34,8 +34,6 @@ for i in tqdm.tqdm(range(11)):
         _grna.append(grna)
 
 print(OPS)
-br
-
 _df = pd.DataFrame([])
 _df['gRNA'] = _grna
 _df['linear_comb']=_linear_comb
